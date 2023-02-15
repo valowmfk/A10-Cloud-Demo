@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ws-conf-file
+  namespace: cyan
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ws-index-file
+  namespace: cyan
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver
+  namespace: cyan
+spec:
+  containers:
+    - name: webserver
+      image: kubernetes-manifests/dev/
+      imagePullPolicy: IfNotPresent
+      ports: 
+      - name: webserver
+        containerPort: 80
+      - name: ws-conf-file
+        configMap:
+          name: ws-conf-file
+          items:
+          - key: ws.conf
+            path: ws.conf
